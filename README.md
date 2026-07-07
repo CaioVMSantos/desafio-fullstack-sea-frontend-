@@ -116,6 +116,9 @@ npm run dev
 5. **Acesse no Navegador:**
 O terminal exibirá um link (geralmente `http://localhost:5173/`). Copie e cole no seu navegador.
 
+6. **Cerifique que o Backend esteja funcionando**
+Link Backend: https://github.com/CaioVMSantos/desafio-fullstack-sea.
+
 > **⚠️ IMPORTANTE:** Para que o login e o fluxo de dados funcionem corretamente, certifique-se de que o **Backend (Spring Boot)** já esteja em execução na sua máquina, preferencialmente na porta `8080`.
 
 ---
