@@ -55,7 +55,7 @@ function Clientes() {
   return (
     <div className="clientes-container">
       <header className="clientes-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1>👥 Painel de Clientes</h1>
+        <h1> Painel de Clientes</h1>
         
         {isAdmin && (
           <div style={{ display: 'flex', gap: '10px' }}>
@@ -66,7 +66,6 @@ function Clientes() {
             <button 
               className="btn-novo" 
               onClick={() => navigate('/usuarios')}
-              style={{ backgroundColor: '#5a2d82', borderColor: '#5a2d82' }}
             > 
               🛡️ Gerenciar Usuários
             </button>

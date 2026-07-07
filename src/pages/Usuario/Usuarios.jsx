@@ -46,17 +46,18 @@ function Usuarios() {
         <h1>🛡️ Gerenciar Usuários</h1>
         
         <div style={{ display: 'flex', gap: '10px' }}>
+          {/* Removido o style inline para assumir o azul ciano padrão do btn-novo */}
           <button 
             className="btn-novo" 
             onClick={() => navigate('/usuarios/novo')} 
-            style={{ backgroundColor: '#5a2d82', borderColor: '#5a2d82' }}
           > 
             Novo Usuário 
           </button>
+          
+          {/* Classe alterada para btn-cancelar (botão vazado) e style inline removido */}
           <button 
-            className="btn-novo" 
+            className="btn-cancelar" 
             onClick={() => navigate('/clientes')}
-            style={{ backgroundColor: '#6c757d', borderColor: '#6c757d' }}
           > 
             Voltar a Clientes
           </button>

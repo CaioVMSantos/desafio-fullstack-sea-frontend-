@@ -21,9 +21,24 @@ function Login() {
         senha: senha
       });
 
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('role', response.data.role);
+      // 1. Pegamos o token enviado pelo Spring Boot
+      const token = response.data.token;
 
+      // 2. Abrimos o token JWT para ler a "bagagem" (Claims)
+      const tokenDecodificado = JSON.parse(atob(token.split('.')[1]));
+      
+      // Vamos imprimir para ter a certeza do que o Java enviou
+      console.log("Token aberto e descodificado:", tokenDecodificado);
+
+      // 3. Pegamos a permissão que agora vem dentro do token
+      // Como adicionou o .claim("role", ...) no Java, ela estará aqui!
+      const userRole = tokenDecodificado.role;
+
+      // 4. Guardamos tudo corretamente no navegador
+      localStorage.setItem('token', token);
+      localStorage.setItem('role', userRole);
+
+      // Navega para o painel
       navigate('/clientes');
     } catch (error) {
       console.error("Erro no login:", error);
@@ -38,8 +53,8 @@ function Login() {
       </div>
       
       <div className="login-banner">
-        <h1>Ficou Interessado?</h1>
-        <p>Preencha o formulário, tire suas dúvidas e solicite sua consulta para acessar o sistema.</p>
+        <h1>Projeto - Sea Tecnologia</h1>
+        <p>Desafio prático de desenvolvimento Backend e Frontend. Um sistema robusto e completo com SpringBoot e React.</p>
       </div>
 
       <div className="login-form-area">

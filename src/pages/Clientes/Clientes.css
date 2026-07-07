@@ -1,75 +1,186 @@
-.clientes-container {
-  padding: 40px;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+/* =========================================
+   CONTAINER PRINCIPAL (GLASSMORPHISM)
+   ========================================= */
+.clientes-container, .usuarios-container {
+  width: 100%;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 50px auto;
+  padding: 40px;
+  
+  /* Efeito de Vidro */
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  
+  color: #ffffff;
+  font-family: 'Inter', -apple-system, sans-serif;
 }
 
 .clientes-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 20px;
 }
 
-.clientes-header h1 {
-  color: #333;
+.clientes-header h1, .clientes-header h2 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 500;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.5px;
 }
 
-.btn-novo {
-  background-color: #28a745;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.btn-novo:hover {
-  background-color: #218838;
-}
-
+/* =========================================
+   TABELAS PREMIUM
+   ========================================= */
 .clientes-tabela {
   width: 100%;
-  border-collapse: collapse;
-  background-color: white;
-  box-shadow: 0 1px 5px rgba(0,0,0,0.1);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.clientes-tabela th, .clientes-tabela td {
-  padding: 15px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 10px;
 }
 
 .clientes-tabela th {
-  background-color: #0056b3;
-  color: white;
+  background: rgba(0, 0, 0, 0.2); /* Fundo sutilmente mais escuro para o cabeçalho */
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  padding: 18px 16px;
+  text-align: left;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.clientes-tabela tr:hover {
-  background-color: #f1f1f1;
+/* Arredonda as pontas do cabeçalho da tabela */
+.clientes-tabela th:first-child { border-top-left-radius: 12px; border-bottom-left-radius: 12px; }
+.clientes-tabela th:last-child { border-top-right-radius: 12px; border-bottom-right-radius: 12px; }
+
+.clientes-tabela td {
+  padding: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+  vertical-align: middle;
+  transition: background 0.2s ease;
 }
 
-.btn-editar {
-  background-color: #ffc107;
+/* Efeito ao passar o mouse na linha da tabela */
+.clientes-tabela tbody tr:hover td {
+  background: rgba(255, 255, 255, 0.03);
+  color: #ffffff;
+}
+
+/* =========================================
+   BOTÕES MODERNOS
+   ========================================= */
+.btn-novo, .btn-salvar {
+  padding: 12px 24px;
+  background-color: #00a3e0; /* Azul Ciano do Login */
+  color: #ffffff;
   border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-novo:hover, .btn-salvar:hover {
+  background-color: #0088bb;
+  transform: translateY(-1px);
+}
+
+/* Botões da Tabela (Estilo Outline/Vazado para não poluir o visual) */
+.btn-editar {
+  padding: 8px 16px;
+  background-color: transparent;
+  color: #fbbf24; /* Amarelo elegante */
+  border: 1px solid rgba(251, 191, 36, 0.5);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
   margin-right: 8px;
-  font-weight: bold;
+}
+
+.btn-editar:hover {
+  background-color: rgba(251, 191, 36, 0.1);
+  border-color: #fbbf24;
 }
 
 .btn-excluir {
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
+  padding: 8px 16px;
+  background-color: transparent;
+  color: #f87171; /* Vermelho elegante */
+  border: 1px solid rgba(248, 113, 113, 0.5);
+  border-radius: 20px;
+  font-size: 0.85rem;
   cursor: pointer;
-  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.btn-excluir:hover {
+  background-color: rgba(248, 113, 113, 0.1);
+  border-color: #f87171;
+}
+
+.btn-cancelar {
+  padding: 12px 24px;
+  background-color: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 30px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: 10px;
+}
+
+.btn-cancelar:hover {
+  color: #ffffff;
+  border-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* =========================================
+   FORMULÁRIOS INTERNOS (Novo Cliente/Usuário)
+   ========================================= */
+.clientes-container input, .usuarios-container input,
+.clientes-container select, .usuarios-container select {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #ffffff;
+  margin-bottom: 20px;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.clientes-container input:focus, .usuarios-container input:focus,
+.clientes-container select:focus, .usuarios-container select:focus {
+  border-color: #00a3e0;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.clientes-container label, .usuarios-container label {
+  display: block;
+  margin-bottom: 8px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+}
+
+/* Evita que as opções do select fiquem brancas no fundo branco do sistema */
+select option {
+  background-color: #012b44;
+  color: #ffffff;
 }
