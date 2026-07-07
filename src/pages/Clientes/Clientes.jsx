@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
+import toast from 'react-hot-toast';
+import Swal from 'sweetalert2';
 import './Clientes.css';
 
 function Clientes() {
   const [clientes, setClientes] = useState([]);
   const [carregando, setCarregando] = useState(true);
-  const [erro, setErro] = useState('');
   const navigate = useNavigate();
 
   const valorGuardado = localStorage.getItem('role');
@@ -21,7 +22,7 @@ function Clientes() {
         setClientes(response.data);
       } catch (error) {
         console.error("Erro ao buscar clientes:", error);
-        setErro('Erro ao buscar os clientes. Verifique se o backend está rodando.');
+        toast.error('Erro ao buscar os clientes. Verifique se o backend está rodando.');
       } finally {
         setCarregando(false);
       }
@@ -36,18 +37,31 @@ function Clientes() {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Tem certeza que deseja excluir este cliente?")) {
+    const result = await Swal.fire({
+      title: 'Tem certeza?',
+      text: "Você está prestes a excluir este cliente. Esta ação não pode ser desfeita!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#f87171', 
+      cancelButtonColor: '#334155', 
+      confirmButtonText: 'Sim, excluir!',
+      cancelButtonText: 'Cancelar',
+      background: '#1e293b', 
+      color: '#ffffff', 
+    });
+
+    if (result.isConfirmed) {
       try {
-        console.log(`Tentando excluir cliente ID: ${id}`);
-        
         await api.delete(`/clientes/${id}`);
         
         setClientes(clientes.filter(c => c.id !== id));
-        console.log("Cliente excluído com sucesso.");
+        
+        toast.success("Cliente excluído com sucesso!");
       } catch (error) {
         console.error("Erro ao excluir:", error);
         const msg = error.response?.data?.message || "Erro ao excluir. Verifique as permissões (admin apenas).";
-        alert(msg);
+        
+        toast.error(msg);
       }
     }
   };
@@ -67,16 +81,15 @@ function Clientes() {
               className="btn-novo" 
               onClick={() => navigate('/usuarios')}
             > 
-              🛡️ Gerenciar Usuários
+              Gerenciar Usuários
             </button>
           </div>
         )}
       </header>
 
-      {erro && <p className="mensagem-erro">{erro}</p>}
       {carregando && <p className="mensagem-carregando">Carregando dados...</p>}
 
-      {!carregando && !erro && (
+      {!carregando && (
         <table className="clientes-tabela">
           <thead>
             <tr>

@@ -1,15 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 
-/* =========================================
-   CONTAINER PRINCIPAL (GLASSMORPHISM)
-   ========================================= */
 .clientes-container, .usuarios-container {
   width: 100%;
   max-width: 1200px;
   margin: 50px auto;
   padding: 40px;
   
-  /* Efeito de Vidro */
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -36,9 +32,6 @@
   letter-spacing: -0.5px;
 }
 
-/* =========================================
-   TABELAS PREMIUM
-   ========================================= */
 .clientes-tabela {
   width: 100%;
   border-collapse: separate;
@@ -47,7 +40,7 @@
 }
 
 .clientes-tabela th {
-  background: rgba(0, 0, 0, 0.2); /* Fundo sutilmente mais escuro para o cabeçalho */
+  background: rgba(0, 0, 0, 0.2); 
   color: rgba(255, 255, 255, 0.9);
   font-weight: 600;
   padding: 18px 16px;
@@ -57,7 +50,6 @@
   letter-spacing: 1px;
 }
 
-/* Arredonda as pontas do cabeçalho da tabela */
 .clientes-tabela th:first-child { border-top-left-radius: 12px; border-bottom-left-radius: 12px; }
 .clientes-tabela th:last-child { border-top-right-radius: 12px; border-bottom-right-radius: 12px; }
 
@@ -70,18 +62,14 @@
   transition: background 0.2s ease;
 }
 
-/* Efeito ao passar o mouse na linha da tabela */
 .clientes-tabela tbody tr:hover td {
   background: rgba(255, 255, 255, 0.03);
   color: #ffffff;
 }
 
-/* =========================================
-   BOTÕES MODERNOS
-   ========================================= */
 .btn-novo, .btn-salvar {
   padding: 12px 24px;
-  background-color: #00a3e0; /* Azul Ciano do Login */
+  background-color: #00a3e0; 
   color: #ffffff;
   border: none;
   border-radius: 30px;
@@ -96,7 +84,6 @@
   transform: translateY(-1px);
 }
 
-/* Botões da Tabela (Estilo Outline/Vazado para não poluir o visual) */
 .btn-editar {
   padding: 8px 16px;
   background-color: transparent;
@@ -149,9 +136,6 @@
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* =========================================
-   FORMULÁRIOS INTERNOS (Novo Cliente/Usuário)
-   ========================================= */
 .clientes-container input, .usuarios-container input,
 .clientes-container select, .usuarios-container select {
   width: 100%;
@@ -179,7 +163,6 @@
   font-size: 0.9rem;
 }
 
-/* Evita que as opções do select fiquem brancas no fundo branco do sistema */
 select option {
   background-color: #012b44;
   color: #ffffff;

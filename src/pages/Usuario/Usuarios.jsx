@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
+import toast from 'react-hot-toast';
+import Swal from 'sweetalert2';
 import '../Clientes/Clientes.css'; 
 
 function Usuarios() {
   const [usuarios, setUsuarios] = useState([]);
   const [carregando, setCarregando] = useState(true);
-  const [erro, setErro] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,7 +17,7 @@ function Usuarios() {
         setUsuarios(response.data);
       } catch (error) {
         console.error("Erro ao buscar usuários:", error);
-        setErro('Erro ao carregar a lista de usuários.');
+        toast.error('Erro ao carregar a lista de usuários.');
       } finally {
         setCarregando(false);
       }
@@ -26,16 +27,29 @@ function Usuarios() {
   }, []);
 
   const handleDelete = async (id) => {
-    if (window.confirm("Atenção: Tem certeza que deseja excluir este usuário do sistema?")) {
+    const result = await Swal.fire({
+      title: 'Atenção',
+      text: "Tem certeza que deseja excluir este usuário do sistema? O acesso dele será revogado imediatamente!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#f87171', 
+      cancelButtonColor: '#334155',  
+      confirmButtonText: 'Sim, excluir!',
+      cancelButtonText: 'Cancelar',
+      background: '#1e293b',
+      color: '#ffffff',
+    });
+
+    if (result.isConfirmed) {
       try {
         const response = await api.delete(`/usuarios/${id}`);
         
         setUsuarios(usuarios.filter(u => u.id !== id));
         
-        alert(response.data); 
+        toast.success(typeof response.data === 'string' ? response.data : "Usuário excluído com sucesso!"); 
       } catch (error) {
         console.error("Erro ao excluir usuário:", error);
-        alert(error.response?.data || "Erro ao excluir usuário.");
+        toast.error(error.response?.data || "Erro ao excluir usuário.");
       }
     }
   };
@@ -43,10 +57,9 @@ function Usuarios() {
   return (
     <div className="clientes-container">
       <header className="clientes-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1>🛡️ Gerenciar Usuários</h1>
+        <h1>Gerenciar Usuários</h1>
         
         <div style={{ display: 'flex', gap: '10px' }}>
-          {/* Removido o style inline para assumir o azul ciano padrão do btn-novo */}
           <button 
             className="btn-novo" 
             onClick={() => navigate('/usuarios/novo')} 
@@ -54,7 +67,6 @@ function Usuarios() {
             Novo Usuário 
           </button>
           
-          {/* Classe alterada para btn-cancelar (botão vazado) e style inline removido */}
           <button 
             className="btn-cancelar" 
             onClick={() => navigate('/clientes')}
@@ -64,10 +76,9 @@ function Usuarios() {
         </div>
       </header>
 
-      {erro && <p className="mensagem-erro">{erro}</p>}
       {carregando && <p className="mensagem-carregando">Carregando dados...</p>}
 
-      {!carregando && !erro && (
+      {!carregando && (
         <table className="clientes-tabela">
           <thead>
             <tr>

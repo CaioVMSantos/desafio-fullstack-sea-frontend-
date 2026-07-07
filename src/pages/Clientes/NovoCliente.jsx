@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
+import toast from 'react-hot-toast';
 
 function NovoCliente() {
   const navigate = useNavigate();
-  const [erro, setErro] = useState('');
+  
   const [nome, setNome] = useState('');
   const [cpf, setCpf] = useState('');
   const [cep, setCep] = useState('');
@@ -14,12 +15,11 @@ function NovoCliente() {
   const [uf, setUf] = useState('');
   const [complemento, setComplemento] = useState('');
   const [numeroTelefone, setNumeroTelefone] = useState('');
-  const [tipoTelefone, setTipoTelefone] = useState('CELULAR'); // Padrão: CELULAR, RESIDENCIAL, COMERCIAL
+  const [tipoTelefone, setTipoTelefone] = useState('CELULAR'); 
   const [emailContato, setEmailContato] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErro('');
 
     const payload = {
       nome: nome,
@@ -47,23 +47,25 @@ function NovoCliente() {
 
     try {
       await api.post('/clientes', payload);
-      alert('Cliente cadastrado com sucesso!');
+      
+      toast.success('Cliente cadastrado com sucesso!');
       navigate('/clientes'); 
+      
     } catch (err) {
       console.error("Erro na requisição:", err);
+      
       if (err.response && err.response.data) {
-        setErro(typeof err.response.data === 'string' ? err.response.data : 'Erro de validação nos campos.');
+        toast.error(typeof err.response.data === 'string' ? err.response.data : 'Erro de validação nos campos.');
       } else {
-        setErro('Erro ao conectar com o servidor.');
+        toast.error('Erro ao conectar com o servidor.');
       }
     }
   };
 
   return (
     <div className="clientes-container">
-      <h2>👥 Cadastrar Novo Cliente</h2>
-      
-      {erro && <p className="mensagem-erro" style={{ color: 'red' }}>{erro}</p>}
+      <h1>Cadastrar Novo Cliente</h1>
+      <br />
 
       <form onSubmit={handleSubmit}>
         <h3>Informações Pessoais</h3>

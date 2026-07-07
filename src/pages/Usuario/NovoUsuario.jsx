@@ -1,19 +1,18 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../../services/api'; // Ajuste o caminho se necessário
+import api from '../../services/api';
+import toast from 'react-hot-toast';
 
 function NovoUsuario() {
-  const navigate = useNavigate();
-  const [erro, setErro] = useState('');
+  const navigate = useNavigate();  
   
   // Estados do formulário
   const [login, setLogin] = useState('');
   const [senha, setSenha] = useState('');
-  const [perfil, setPerfil] = useState('ROLE_USER'); // Deixamos o Padrão como default
+  const [perfil, setPerfil] = useState('ROLE_USER'); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErro('');
 
     const payload = {
       login: login,
@@ -22,21 +21,22 @@ function NovoUsuario() {
     };
 
     try {
-      // Chama a sua rota de registro que já testamos no Postman
       await api.post('/auth/registrar', payload);
-      alert('Usuário cadastrado com sucesso!');
       
-      // Limpa os campos após o sucesso para facilitar um novo cadastro
+      toast.success('Usuário cadastrado com sucesso!');
+      
       setLogin('');
       setSenha('');
       setPerfil('ROLE_USER');
       
     } catch (err) {
       console.error("Erro ao cadastrar usuário:", err);
+      
+      // Notificações de Erro Premium
       if (err.response && err.response.data) {
-        setErro(typeof err.response.data === 'string' ? err.response.data : 'Erro ao cadastrar.');
+        toast.error(typeof err.response.data === 'string' ? err.response.data : 'Erro ao cadastrar usuário.');
       } else {
-        setErro('Erro de conexão com o servidor.');
+        toast.error('Erro de conexão com o servidor.');
       }
     }
   };
@@ -45,8 +45,6 @@ function NovoUsuario() {
     <div className="usuarios-container">
       <h2>🛡️ Cadastrar Novo Usuário (Admin)</h2>
       
-      {erro && <p className="mensagem-erro" style={{ color: 'red' }}>{erro}</p>}
-
       <form onSubmit={handleSubmit}>
         <div>
           <label>E-mail (Login):</label>

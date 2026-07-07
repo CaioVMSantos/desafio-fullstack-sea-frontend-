@@ -1,4 +1,6 @@
 import { Navigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import Header from '../components/Header.jsx'; 
 
 function RotaPrivada({ children, exigeAdmin }) {
   const token = localStorage.getItem('token');
@@ -9,11 +11,19 @@ function RotaPrivada({ children, exigeAdmin }) {
   }
 
   if (exigeAdmin && role !== 'ROLE_ADMIN') {
-    alert("Acesso negado: Área restrita para Administradores.");
+    toast.error("Acesso negado: Área restrita para Administradores.");
     return <Navigate to="/clientes" replace />;
   }
 
-  return children;
+  return (
+    <>
+      <Header />
+      
+      <div style={{ paddingTop: '100px', width: '100%', display: 'flex', justifyContent: 'center' }}>
+        {children}
+      </div>
+    </>
+  );
 }
 
 export default RotaPrivada;

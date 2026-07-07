@@ -1,19 +1,18 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
+import toast from 'react-hot-toast';
 import './Login.css';
 import logoSea from '../../assets/sea-logo.png';
 
 function Login() {
   const [login, setLogin] = useState('');
   const [senha, setSenha] = useState('');
-  const [erro, setErro] = useState('');
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setErro('');
 
     try {
       const response = await api.post('/auth/login', {
@@ -21,28 +20,23 @@ function Login() {
         senha: senha
       });
 
-      // 1. Pegamos o token enviado pelo Spring Boot
       const token = response.data.token;
 
-      // 2. Abrimos o token JWT para ler a "bagagem" (Claims)
       const tokenDecodificado = JSON.parse(atob(token.split('.')[1]));
-      
-      // Vamos imprimir para ter a certeza do que o Java enviou
       console.log("Token aberto e descodificado:", tokenDecodificado);
 
-      // 3. Pegamos a permissão que agora vem dentro do token
-      // Como adicionou o .claim("role", ...) no Java, ela estará aqui!
       const userRole = tokenDecodificado.role;
 
-      // 4. Guardamos tudo corretamente no navegador
       localStorage.setItem('token', token);
       localStorage.setItem('role', userRole);
 
-      // Navega para o painel
+      toast.success('Login realizado com sucesso!');
+      
       navigate('/clientes');
     } catch (error) {
       console.error("Erro no login:", error);
-      setErro('Credenciais inválidas. Tente novamente.');
+      
+      toast.error('Credenciais inválidas. Verifique seu e-mail e senha.');
     }
   };
 
@@ -61,8 +55,6 @@ function Login() {
         <div className="login-form-content">
           <h2>Acessar Sistema</h2>
           <p>Insira suas credenciais corporativas.</p>
-
-          {erro && <div className="mensagem-erro">{erro}</div>}
 
           <form onSubmit={handleLogin}>
             <div className="input-group">
