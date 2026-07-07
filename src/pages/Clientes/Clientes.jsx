@@ -1,24 +1,26 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
-import './Clientes.css'; // Vamos criar esse CSS no próximo passo
+import './Clientes.css';
 
 function Clientes() {
-  // Estados da nossa tela
   const [clientes, setClientes] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState('');
   const navigate = useNavigate();
 
-  // O useEffect roda automaticamente quando a tela é carregada
+  const valorGuardado = localStorage.getItem('role');
+  console.log("O que está guardado na chave 'role':", valorGuardado);
+
+  const isAdmin = localStorage.getItem('role') === 'ROLE_ADMIN';
+
   useEffect(() => {
-    // 1. Declaramos a função DENTRO do useEffect
     const buscarClientes = async () => {
       try {
         const response = await api.get('/clientes');
         setClientes(response.data);
       } catch (error) {
-        console.error(error);
+        console.error("Erro ao buscar clientes:", error);
         setErro('Erro ao buscar os clientes. Verifique se o backend está rodando.');
       } finally {
         setCarregando(false);
@@ -28,36 +30,53 @@ function Clientes() {
     buscarClientes();
   }, []);
 
-  // Formatar CPF para exibir na tabela (000.000.000-00)
   const formatarCPF = (cpf) => {
+    if (!cpf) return '';
     return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
   };
 
-  // Função para deletar cliente
   const handleDelete = async (id) => {
     if (window.confirm("Tem certeza que deseja excluir este cliente?")) {
       try {
+        console.log(`Tentando excluir cliente ID: ${id}`);
+        
         await api.delete(`/clientes/${id}`);
+        
         setClientes(clientes.filter(c => c.id !== id));
+        console.log("Cliente excluído com sucesso.");
       } catch (error) {
-        console.error(error);
-        alert("Erro ao excluir o cliente.");
+        console.error("Erro ao excluir:", error);
+        const msg = error.response?.data?.message || "Erro ao excluir. Verifique as permissões (admin apenas).";
+        alert(msg);
       }
     }
   };
 
   return (
     <div className="clientes-container">
-      <header className="clientes-header">
+      <header className="clientes-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h1>👥 Painel de Clientes</h1>
-        <button className="btn-novo" onClick={() => navigate('/clientes/novo')}> Novo Cliente </button>
+        
+        {isAdmin && (
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <button className="btn-novo" onClick={() => navigate('/clientes/novo')}> 
+              Novo Cliente 
+            </button>
+            
+            <button 
+              className="btn-novo" 
+              onClick={() => navigate('/usuarios')}
+              style={{ backgroundColor: '#5a2d82', borderColor: '#5a2d82' }}
+            > 
+              🛡️ Gerenciar Usuários
+            </button>
+          </div>
+        )}
       </header>
 
-      {/* Mensagens de feedback */}
       {erro && <p className="mensagem-erro">{erro}</p>}
       {carregando && <p className="mensagem-carregando">Carregando dados...</p>}
 
-      {/* Tabela de Dados */}
       {!carregando && !erro && (
         <table className="clientes-tabela">
           <thead>
@@ -66,44 +85,44 @@ function Clientes() {
               <th>Nome</th>
               <th>CPF</th>
               <th>Cidade/UF</th>
-              <th>Ações</th>
+              {isAdmin && <th>Ações</th>}
             </tr>
           </thead>
           <tbody>
-  {clientes.length === 0 ? (
-    <tr>
-      <td colSpan="5" style={{ textAlign: 'center' }}>Nenhum cliente cadastrado.</td>
-    </tr>
-  ) : (
-    clientes.map((cliente) => {
-      // DEBUG: Isso vai aparecer no seu Console (F12)
-      console.log("Objeto cliente recebido:", cliente); 
-      
-      return (
-        <tr key={cliente.id}>
-          <td>{cliente.id}</td>
-          <td>{cliente.nome}</td>
-          <td>{formatarCPF(cliente.cpf)}</td>
-          <td>{cliente.endereco?.cidade} / {cliente.endereco?.uf}</td>
-          <td>
-            <button 
-              className="btn-editar" 
-              onClick={() => navigate(`/clientes/editar/${cliente.id}`)}
-            >
-              Editar
-            </button>
-            <button 
-              className="btn-excluir" 
-              onClick={() => handleDelete(cliente.id)}
-            >
-              Excluir
-            </button>
-          </td>
-        </tr>
-      );
-    })
-  )}
-</tbody>
+            {clientes.length === 0 ? (
+              <tr>
+                <td colSpan={isAdmin ? 5 : 4} style={{ textAlign: 'center' }}>
+                  Nenhum cliente cadastrado.
+                </td>
+              </tr>
+            ) : (
+              clientes.map((cliente) => (
+                <tr key={cliente.id}>
+                  <td>{cliente.id}</td>
+                  <td>{cliente.nome}</td>
+                  <td>{formatarCPF(cliente.cpf)}</td>
+                  <td>{cliente.endereco?.cidade} / {cliente.endereco?.uf}</td>
+                  
+                  {isAdmin && (
+                    <td>
+                      <button 
+                        className="btn-editar" 
+                        onClick={() => navigate(`/clientes/editar/${cliente.id}`)}
+                      >
+                        Editar
+                      </button>
+                      <button 
+                        className="btn-excluir" 
+                        onClick={() => handleDelete(cliente.id)}
+                      >
+                        Excluir
+                      </button>
+                    </td>
+                  )}
+                </tr>
+              ))
+            )}
+          </tbody>
         </table>
       )}
     </div>

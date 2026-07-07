@@ -8,7 +8,6 @@ function EditarCliente() {
   const [salvando, setSalvando] = useState(false);
   const [erro, setErro] = useState('');
 
-  // Estados Base
   const [nome, setNome] = useState('');
   const [cpf, setCpf] = useState('');
   const [endereco, setEndereco] = useState({
@@ -17,7 +16,6 @@ function EditarCliente() {
   const [telefones, setTelefones] = useState([{ tipo: 'CELULAR', numero: '' }]);
   const [emails, setEmails] = useState([{ email: '' }]);
 
-  // Buscar dados do cliente ao carregar a página
   useEffect(() => {
     const buscarCliente = async () => {
       try {
