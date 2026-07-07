@@ -43,7 +43,8 @@ function NovoUsuario() {
 
   return (
     <div className="usuarios-container">
-      <h2>🛡️ Cadastrar Novo Usuário (Admin)</h2>
+      <h1>Cadastrar Novo Usuário (Admin)</h1>
+      <br />
       
       <form onSubmit={handleSubmit}>
         <div>
